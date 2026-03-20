@@ -1,0 +1,42 @@
+<div class="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+    <div class="text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">마지막으로 확인해 주세요</h2>
+        <p class="text-sm md:text-base text-slate-500 font-medium">활동량과 알러지 정보를 입력하면 분석이 시작됩니다.</p>
+    </div>
+
+    <form hx-post="{% url 'mealiq:analyze' %}" hx-target="#main-content" hx-swap="innerHTML" class="space-y-6">
+        {% csrf_token %}
+        <input type="hidden" name="pet_name" value="{{ pet_name }}">
+        <input type="hidden" name="breed" value="{{ breed }}">
+        <input type="hidden" name="weight" value="{{ weight }}">
+
+        <div class="space-y-4">
+            <label class="text-sm font-bold text-slate-500 ml-4">활동량</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                    <input type="radio" name="activity" value="low" class="peer hidden">
+                    <div class="peer-checked:bg-slate-900 peer-checked:text-white bg-white border-2 border-slate-100 rounded-2xl py-3 md:py-4 text-center font-bold text-slate-600 transition-all hover:border-slate-300">낮음</div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="activity" value="normal" checked class="peer hidden">
+                    <div class="peer-checked:bg-slate-900 peer-checked:text-white bg-white border-2 border-slate-100 rounded-2xl py-4 text-center font-bold text-slate-600 transition-all hover:border-slate-300">보통</div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="activity" value="high" class="peer hidden">
+                    <div class="peer-checked:bg-slate-900 peer-checked:text-white bg-white border-2 border-slate-100 rounded-2xl py-4 text-center font-bold text-slate-600 transition-all hover:border-slate-300">높음</div>
+                </label>
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <label class="text-sm font-bold text-slate-500 ml-4">알러지 성분 (쉼표로 구분)</label>
+            <input type="text" name="allergies" placeholder="예: 닭고기, 연어"
+                class="w-full bg-white border-2 border-slate-100 rounded-3xl px-6 py-4 font-bold text-slate-900 focus:outline-none focus:border-brand-500 transition-all">
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-6 rounded-3xl text-xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><path d="M12 2v4"/><path d="m16.2 4.2 2.8 2.8"/><path d="M18 12h4"/><path d="m16.2 19.8 2.8-2.8"/><path d="M12 18v4"/><path d="m4.8 19.8 2.8-2.8"/><path d="M2 12h4"/><path d="m4.8 4.2 2.8 2.8"/></svg>
+            AI 분석 시작하기
+        </button>
+    </form>
+</div>

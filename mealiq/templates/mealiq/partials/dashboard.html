@@ -1,0 +1,114 @@
+<div class="max-w-5xl mx-auto space-y-6 md:space-y-10 animate-in fade-in zoom-in-95 duration-700">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="w-full">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="bg-brand-50 text-brand-600 text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded">AI Analysis Complete</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                {{ pet_name }}님을 위한 <br class="sm:hidden" /><span class="text-brand-600 underline decoration-brand-200 underline-offset-4">14일 맞춤 식단</span>
+            </h2>
+        </div>
+        
+        <div class="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 self-end md:self-auto">
+            <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-900 rounded-xl flex items-center justify-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="md:w-6 md:h-6"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-5c1.62-2.2 5-3 5-3"/><path d="M15 15v5s3.03-.55 5-2c2.2-1.62 3-5 3-5"/></svg>
+            </div>
+            <div>
+                <p class="text-[8px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Metabolism Status</p>
+                <p class="text-xs md:text-sm font-bold text-slate-700">{{ result.metabolism_status }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% if result.warning %}
+    <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-start gap-3 text-amber-800 text-xs md:text-sm font-medium shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500 shrink-0"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+        <span class="leading-relaxed">{{ result.warning }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Key Metrics -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <!-- 1일 권장 칼로리 -->
+        <div class="bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white hover:border-brand-100 transition-all group">
+            <div class="flex justify-between items-start mb-4 md:mb-6">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="md:w-6 md:h-6"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                </div>
+                <p class="text-[8px] md:text-[10px] font-black text-slate-300 uppercase tracking-widest">Daily Energy</p>
+            </div>
+            <p class="text-3xl md:text-4xl font-black text-slate-900 mb-2 tabular-nums">{{ result.daily_kcal }} <span class="text-lg md:text-xl font-bold text-slate-400">kcal</span></p>
+            <p class="text-xs md:text-sm font-semibold text-slate-500">일일 권장 섭취량</p>
+        </div>
+
+        <!-- 14일 총 원물통 -->
+        <div class="bg-brand-600 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-xl shadow-brand-200 border border-brand-500 group">
+            <div class="flex justify-between items-start mb-4 md:mb-6">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="md:w-6 md:h-6"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                </div>
+                <p class="text-[8px] md:text-[10px] font-black text-white/40 uppercase tracking-widest">Two-Week Supply</p>
+            </div>
+            <p class="text-3xl md:text-4xl font-black text-white mb-2 tabular-nums">{{ result.total_buckets }} <span class="text-lg md:text-xl font-bold text-white/60">통</span></p>
+            <p class="text-xs md:text-sm font-semibold text-white/80">정기 구독 배송 단위</p>
+        </div>
+
+        <!-- 가격 정보 -->
+        <div class="bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white hover:border-brand-100 transition-all group col-span-1 sm:col-span-2 lg:col-span-1">
+            <div class="flex justify-between items-start mb-4 md:mb-6">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="md:w-6 md:h-6"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                </div>
+                <p class="text-[8px] md:text-[10px] font-black text-slate-300 uppercase tracking-widest">Subscription</p>
+            </div>
+            <p class="text-3xl md:text-4xl font-black text-slate-900 mb-2 tabular-nums">48,000 <span class="text-lg md:text-xl font-bold text-slate-400">원</span></p>
+            <p class="text-xs md:text-sm font-semibold text-slate-500">2주 단위 구독 가격</p>
+        </div>
+    </section>
+
+    <!-- Detailed Recipes -->
+    <div class="bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl shadow-slate-200/30 border border-slate-100">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 md:mb-10">
+            <h3 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">상세 레시피 구성</h3>
+            <button class="text-brand-600 font-bold text-xs bg-brand-50 px-4 py-2 rounded-full hover:bg-brand-100 transition-all">전체 성분 보기</button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {% for recipe in result.recipes %}
+            <div class="relative p-6 rounded-[1.5rem] md:rounded-[2rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer">
+                <div class="flex justify-between items-center mb-4 md:mb-6">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Item {{ forloop.counter }}</span>
+                    <span class="text-lg md:text-xl font-black text-brand-600 tabular-nums">{{ recipe.quantity }}통</span>
+                </div>
+                <h4 class="text-base md:text-lg font-extrabold text-slate-800 mb-4 md:mb-6 leading-tight h-12 flex items-center">{{ recipe.name }}</h4>
+                
+                <div class="space-y-4">
+                    {% for nutrient in recipe.nutrients %}
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-[9px] font-black uppercase tracking-wider text-slate-400">
+                            <span>{{ nutrient.label }}</span>
+                            <span class="text-slate-900">{{ nutrient.value }}%</span>
+                        </div>
+                        <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-slate-900 rounded-full" style="width: {{ nutrient.value }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-10 md:mt-12 flex flex-col md:flex-row gap-4">
+            <button class="w-full md:flex-1 bg-brand-600 text-white font-bold py-5 md:py-6 rounded-[1.5rem] md:rounded-3xl text-base md:text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-100 flex items-center justify-center gap-2 group">
+                장바구니에 담기
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button hx-get="{% url 'mealiq:index' %}" hx-target="#main-content" hx-swap="innerHTML"
+                class="w-full md:w-auto bg-slate-50 text-slate-500 font-bold px-8 py-5 md:py-6 rounded-[1.5rem] md:rounded-3xl text-base md:text-lg hover:bg-slate-100 transition-all border border-slate-100">
+                다시 설계하기
+            </button>
+        </div>
+    </div>
+</div>

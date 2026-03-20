@@ -1,0 +1,24 @@
+<div class="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div class="text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">반려견의 이름을 알려주세요</h2>
+        <p class="text-sm md:text-base text-slate-500 font-medium">맞춤 영양 처방을 위해 가장 먼저 필요한 정보입니다.</p>
+    </div>
+
+    <form hx-post="{% url 'mealiq:next_step' %}" hx-target="#stepper-container" hx-swap="innerHTML" class="space-y-6">
+        {% csrf_token %}
+        <input type="hidden" name="step" value="1">
+        
+        <div class="relative group">
+            <input type="text" name="pet_name" required placeholder="이름을 입력하세요"
+                class="w-full bg-white border-2 border-slate-100 rounded-3xl px-8 py-6 text-xl font-bold text-slate-900 placeholder-slate-300 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all shadow-sm">
+            <div class="absolute right-6 top-1/2 -translate-y-1/2 bg-slate-50 p-2 rounded-xl text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 text-white font-bold py-5 rounded-3xl text-lg hover:bg-brand-700 transition-all shadow-xl shadow-brand-100 flex items-center justify-center gap-2 group">
+            다음 단계로
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+    </form>
+</div>

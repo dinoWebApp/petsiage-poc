@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: petsiage_fullstack
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-fullstack-poc-key
+    restart: always
+
+# Nginx 연동 시, 호스트의 8000 포트로 reverse proxy 설정을 하시면 됩니다.
