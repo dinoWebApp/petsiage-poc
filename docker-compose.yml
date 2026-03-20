@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      network: host
     container_name: petsiage_fullstack
     ports:
       - "8000:8000"
