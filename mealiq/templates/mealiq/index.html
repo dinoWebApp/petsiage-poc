@@ -1,10 +1,10 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto mt-12">
-    <!-- Stepper Wrapper -->
-    <div id="stepper-container">
-        {% include "mealiq/partials/step1.html" %}
+<div class="max-w-xl mx-auto">
+    <!-- Stepper Container -->
+    <div id="stepper-container" class="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-white">
+        {% include 'mealiq/partials/step0_vision.html' %}
     </div>
 </div>
 {% endblock %}

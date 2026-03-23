@@ -8,6 +8,7 @@
         {% csrf_token %}
         <input type="hidden" name="step" value="2">
         <input type="hidden" name="pet_name" value="{{ pet_name }}">
+        <input type="hidden" name="vision_analysis" value="{{ vision_analysis }}">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-2">

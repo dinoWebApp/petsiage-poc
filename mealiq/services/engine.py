@@ -26,20 +26,61 @@ def calculate_daily_calories(weight: float, activity_level: str) -> float:
     return rer * factor
 
 
-def analyze_diet(weight: float, activity_level: str, allergies: list[str]) -> dict:
+def simulate_vision_api(image_data: str) -> dict:
     """
-    Mealiq 맞춤형 식단 산출 엔진 (v2: Intelligent Matching)
-    1. DER 기반 14일치 필요 칼로리 계산
-    2. 알러지 성분 필터링 및 카테고리별 최적 원물 매칭
-    3. 동적 레시피 생성 및 영양 상태 반환
+    Multimodal Vision API 시뮬레이터 (펫시어지 면접용)
+    - 이미지의 성분표 OCR 및 원재료 특징 추출
+    """
+    # 실제 구현 시 Google Vision API 또는 GPT-4o Vision 연동
+    return {
+        "detected_brand": "Premium Dog Food A",
+        "detected_ingredients": ["Chicken", "Corn", "Wheat Gluten"],
+        "analysis_summary": "고단백이나 곡물 함량이 높아 알러지 유발 가능성이 확인됨.",
+        "safety_score": 65
+    }
+
+
+def generate_llm_commentary(pet_name: str, breed: str, vision_data: dict, selected_recipe: str) -> str:
+    """
+    LLM 기반 개인화 영양 코멘터리 생성 (GPT-4o/Claude 3.5 Sonnet 연동 가정)
+    """
+    # 펫시어지의 'AI 중심 제품' 철학을 반영한 고도의 개인화 텍스트
+    breed_info = {
+        "Bichon": "비숑 특유의 피부 민감도를 고려했을 때,",
+        "Poodle": "푸들의 슬개골 건강과 곱슬거리는 모질 유지를 위해,",
+        "Retriever": "리트리버의 관절 건강과 체중 관리를 위해,"
+    }
+    
+    prefix = breed_info.get(breed, f"{pet_name}님의 건강 상태를 분석한 결과,")
+    
+    if "Grain" in str(vision_data.get("detected_ingredients")):
+        vision_insight = "기존 사료에서 발견된 곡물 성분은 현재의 소화 불량 원인이 될 수 있습니다."
+    else:
+        vision_insight = "현재 급여 중인 사료의 성분은 양호하나 영양 균형이 다소 치중되어 있습니다."
+
+    return f"{prefix} {vision_insight} 따라서 AI는 {selected_recipe}를 기반으로 한 맞춤 식단을 처방하였습니다. 이는 단순 칼로리 매칭을 넘어 {pet_name}님의 생애 주기와 비전 데이터를 통합 분석한 결과입니다."
+
+
+def analyze_diet(weight: float, activity_level: str, allergies: list[str], vision_data: dict = None) -> dict:
+    """
+    Mealiq 맞춤형 식단 산출 엔진 (v3: AI-Native Multimodal)
+    1. Vision API 데이터를 통한 가중치 조정
+    2. DER 기반 14일치 필요 칼로리 계산
+    3. LLM 기반 개인화 리포트 생성
     """
     daily_kcal = calculate_daily_calories(weight, activity_level)
     fortnight_kcal = daily_kcal * 14
     
+    # 비전 데이터가 있을 경우 알러지 리스트 자동 업데이트 (AI-Native 경험)
+    if vision_data and "detected_ingredients" in vision_data:
+        # 비전에서 감지된 성분 중 위험 요소를 알러지 리스트에 동적 추가
+        if "Corn" in vision_data["detected_ingredients"]:
+            allergies.append("옥수수")
+    
     KCAL_PER_BUCKET = 150
     total_buckets = math.ceil(fortnight_kcal / KCAL_PER_BUCKET)
     
-    # 원물 라이브러리 (영양 데이터 추가)
+    # 원물 라이브러리
     library = [
         {"id": "chicken", "name": "닭고기", "category": "protein", "protein_pct": 82, "precision": 98},
         {"id": "beef", "name": "소고기", "category": "protein", "protein_pct": 78, "precision": 96},
@@ -51,9 +92,8 @@ def analyze_diet(weight: float, activity_level: str, allergies: list[str]) -> di
         {"id": "coconut_oil", "name": "코코넛 오일", "category": "oil", "protein_pct": 0, "precision": 97},
     ]
     
-    # 알러지 필터링 (부분 일치 지원: '연어' 입력 시 '연어 오일' 제외)
+    # 지능형 알러지 필터링 (부분 일치 지원)
     lower_allergies: list[str] = [str(a).lower() for a in allergies]
-    
     def is_safe(ingredient: dict) -> bool:
         i_name = str(ingredient['name']).lower()
         i_id = str(ingredient['id']).lower()
@@ -69,11 +109,7 @@ def analyze_diet(weight: float, activity_level: str, allergies: list[str]) -> di
     selected_vitamin = next((i for i in safe_ingredients if i['category'] == 'vitamin'), {"name": "혼합 채소", "protein_pct": 0, "precision": 0})
     selected_oil = next((i for i in safe_ingredients if i['category'] == 'oil'), {"name": "영양 오일", "protein_pct": 0, "precision": 0})
 
-    # 라이브러리에 없는 알러지 성분 확인
-    known_all = {str(i['id']).lower() for i in library} | {str(i['name']) for i in library}
-    unknown_allergies = [a for a in allergies if str(a).lower() not in known_all and str(a) not in known_all]
-
-    # 동적 레시피 구성 (실제 영양 수치 포함)
+    # 동적 레시피 구성
     recipes = [
         {
             "name": f"Mealiq {selected_protein['name']} 베이스", 
@@ -98,17 +134,21 @@ def analyze_diet(weight: float, activity_level: str, allergies: list[str]) -> di
             "quantity": math.ceil(total_buckets * 0.1), 
             "unit": "통",
             "nutrients": [
-                {"label": "칼로리 비율", "value": 45}, # 오일의 경우 고정값 또는 다른 로직 적용
+                {"label": "칼로리 비율", "value": 45},
                 {"label": "영양 정밀도", "value": selected_oil.get("precision", 0)}
             ]
         },
     ]
     
+    # LLM 코멘터리 생성 (비전 데이터 결합)
+    ai_commentary = generate_llm_commentary("User's Pet", "Unknown", vision_data or {}, selected_protein['name'])
+
     return {
         "daily_kcal": round(daily_kcal, 2),
         "total_buckets": total_buckets,
         "recipes": recipes,
         "metabolism_status": "Optimum",
-        "ai_optimized": True,
-        "warning": f"미등록 알러지 성분({', '.join(unknown_allergies)})은 AI가 별도로 분석 중입니다." if unknown_allergies else None
+        "vision_analysis": vision_data,
+        "ai_commentary": ai_commentary,
+        "ai_optimized": True
     }

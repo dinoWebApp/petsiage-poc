@@ -1,0 +1,54 @@
+<div class="space-y-6 md:space-y-8 animate-in fade-in zoom-in-95 duration-500">
+    <div class="text-center">
+        <div class="inline-flex items-center gap-2 bg-brand-50 text-brand-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            AI Multimodal Vision
+        </div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">사료 사진으로 스마트 분석</h2>
+        <p class="text-sm md:text-base text-slate-500 font-medium">현재 급여 중인 사료의 성분표를 찍어주시면 AI가 영양 균형을 분석합니다.</p>
+    </div>
+
+    <div class="max-w-md mx-auto">
+        <form hx-post="{% url 'mealiq:vision_analyze' %}" 
+              hx-target="#stepper-container" 
+              hx-swap="innerHTML"
+              enctype="multipart/form-data"
+              class="relative">
+            {% csrf_token %}
+            <div class="border-2 border-dashed border-slate-200 rounded-[2rem] p-10 text-center hover:border-brand-400 hover:bg-brand-50/30 transition-all group cursor-pointer"
+                 onclick="document.getElementById('vision-upload').click()">
+                <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 mx-auto mb-4 group-hover:bg-white group-hover:text-brand-600 transition-all shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <p class="text-slate-900 font-bold mb-1">사진 업로드 또는 드래그</p>
+                <p class="text-xs text-slate-400 font-medium">JPG, PNG (최대 10MB)</p>
+                <input type="file" id="vision-upload" name="pet_photo" class="hidden" onchange="this.form.requestSubmit()">
+            </div>
+
+            <div class="mt-6 flex flex-col gap-3">
+                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2">
+                    <span>AI 비전 분석 시작</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+                <button type="button" 
+                        hx-post="{% url 'mealiq:next_step' %}"
+                        hx-vals='{"step": 0}'
+                        hx-target="#stepper-container"
+                        class="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">아니요, 직접 입력할게요</button>
+            </div>
+            
+            <!-- HTMX Indicator CSS -->
+            <style>
+                .htmx-indicator { display: none; }
+                .htmx-request .htmx-indicator { display: flex; }
+                .htmx-request.htmx-indicator { display: flex; }
+            </style>
+            
+            <!-- Loading State for HTMX -->
+            <div class="htmx-indicator absolute inset-0 flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-[2rem] z-50 animate-in fade-in duration-300">
+                <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-4"></div>
+                <p class="text-brand-600 font-black text-sm animate-pulse">AI가 성분표를 정밀 분석 중입니다...</p>
+            </div>
+        </form>
+    </div>
+</div>
