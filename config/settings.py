@@ -60,3 +60,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# settings.py
+# Nginx가 넘겨준 X-Forwarded-Proto 헤더를 믿고, 자신이 HTTPS로 서비스 중임을 깨닫게 합니다.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# (참고) CSRF 에러 방지를 위해 이것도 꼭 필요합니다.
+CSRF_TRUSTED_ORIGINS = ['https://www.pet-example.kro.kr', 'https://pet-example.kro.kr']
